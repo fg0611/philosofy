@@ -3,7 +3,7 @@ import { Button } from "react-bootstrap";
 import loader from "./assets/loader.gif";
 
 function Quotes() {
-  const baseUrl = "http://127.0.0.1:8000";
+  const baseUrl = "https://philosofyapi.vercel.app/";
   // const baseUrl = "https://philosofyapi.vercel.app";
 
   // const [printers, setprinters] = useState([]);
