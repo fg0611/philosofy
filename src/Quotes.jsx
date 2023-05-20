@@ -1,40 +1,39 @@
 import { useState } from "react";
 import { Button } from "react-bootstrap";
 import loader from "./assets/loader.gif";
+import axios from "axios";
 
 function Quotes() {
-  const baseUrl = "https://philosofyapi.vercel.app";
-  // const baseUrl = "https://philosofyapi.vercel.app";
-
-  // const [printers, setprinters] = useState([]);
-  // const [selected, setselected] = useState("");
+  const baseUrl = import.meta.env.VITE_API_URL;
   const [error, setError] = useState("");
   const [quote, setquote] = useState("");
   const [loading, setloading] = useState(false);
 
   const getByAuthor = async () => {
     setloading(true);
-    fetch(baseUrl + "/name")
-      .then((res) => res.json())
-      .then((res) => {
-        setTimeout(() => {
-          setquote(res?.message);
-          setloading(false);
-        }, 1000);
-      })
-      .catch((err) => setError(err));
+    const response = await axios.get(baseUrl + "/name");
+    if (response.status < 300 && response?.data?.message?.length > 0) {
+      setloading(false);
+      setquote(response.data.message);
+    } else if (response.status > 300) {
+      setloading(false);
+      setError(`${response.status}`);
+    } else {
+      setloading(false);
+    }
   };
-  const getBySchool = () => {
+  const getBySchool = async () => {
     setloading(true);
-    fetch(baseUrl + "/school")
-      .then((res) => res.json())
-      .then((res) => {
-        setTimeout(() => {
-          setquote(res?.message);
-          setloading(false);
-        }, 1000);
-      })
-      .catch((err) => setError(err));
+    const response = await axios.get(baseUrl + "/school");
+    if (response.status < 300 && response?.data?.message?.length > 0) {
+      setloading(false);
+      setquote(response.data.message);
+    } else if (response.status > 300) {
+      setloading(false);
+      setError(`${response.status}`);
+    } else {
+      setloading(false);
+    }
   };
 
   return (
