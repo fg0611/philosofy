@@ -11,7 +11,7 @@ function Quotes() {
 
   const getByAuthor = async () => {
     setloading(true);
-    const response = await axios.get(baseUrl + "/name");
+    const response = await axios.get(baseUrl + "/api/name");
     if (response.status < 300 && response?.data?.message?.length > 0) {
       setloading(false);
       setquote(response.data.message);
@@ -24,7 +24,7 @@ function Quotes() {
   };
   const getBySchool = async () => {
     setloading(true);
-    const response = await axios.get(baseUrl + "/school");
+    const response = await axios.get(baseUrl + "/api/school");
     if (response.status < 300 && response?.data?.message?.length > 0) {
       setloading(false);
       setquote(response.data.message);
@@ -55,12 +55,12 @@ function Quotes() {
               : "Click below to find a quote"}
           </p>
           <p>{error.length > 0 ? error : ""}</p>
+          <div className="d-flex gap-4">
+            <Button onClick={getByAuthor}>By random author</Button>
+            <Button onClick={getBySchool}>By random school</Button>
+          </div>
         </>
       )}
-      <div className="d-flex gap-4">
-        <Button onClick={getByAuthor}>By random author</Button>
-        <Button onClick={getBySchool}>By random school</Button>
-      </div>
     </div>
   );
 }

@@ -1,4 +1,5 @@
-import axios from "axios";
+// import axios from "axios";
+import wretch from "wretch";
 import { useState } from "react";
 import { Button, Form, Input } from "antd";
 const { TextArea } = Input;
@@ -6,24 +7,38 @@ import loader from "./assets/loader.gif";
 // import TextArea from "antd/es/input/TextArea";
 
 const baseUrl = import.meta.env.VITE_API_URL;
+console.log(baseUrl);
 
 const Gpt = () => {
   const [error, setError] = useState("");
   const [response, setResponse] = useState("");
   const [loading, setloading] = useState(false);
 
-  const onFinish = async (values) => {
+  const onFinish = async (prompt) => {
     setloading(true);
-    const response = await axios.post(baseUrl + "/chat", { prompt: values });
-    if (response.status < 300 && response?.data?.message?.length > 0) {
-      setloading(false);
-      setResponse(response.data.message);
-    } else if (response.status > 300) {
-      setloading(false);
-      setError(`${response.status}`);
-    } else {
-      setloading(false);
-    }
+    wretch(baseUrl + "/api/gpt")
+      .post({ prompt })
+      .json((response) => {
+        if (response?.message) {
+          setResponse(response.message);
+        } else {
+          setError("ERR");
+        }
+      })
+      .catch((error) => {
+        // Handle error
+        console.log(error);
+      });
+    // const response = await axios.post(baseUrl + "/api/gpt", {prompt});
+    // if (response.status < 300 && response?.data?.message?.length > 0) {
+    //   setloading(false);
+    //   setResponse(response.data.message);
+    // } else if (response.status > 300) {
+    //   setloading(false);
+    //   setError(`${response.status}`);
+    // } else {
+    //   setloading(false);
+    // }
   };
 
   return (
@@ -56,7 +71,9 @@ const Gpt = () => {
               </Button>
             </Form.Item>
           </Form>
-          <p>{response?.length > 0 && error?.length === 0 ? response : error}</p>
+          <p>
+            {response?.length > 0 && error?.length === 0 ? response : error}
+          </p>
         </>
       )}
     </div>
