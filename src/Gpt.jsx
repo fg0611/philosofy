@@ -14,31 +14,43 @@ const Gpt = () => {
   const [response, setResponse] = useState("");
   const [loading, setloading] = useState(false);
 
-  const onFinish = async (prompt) => {
+  const askTurbo = async (prompt) => {
     setloading(true);
     wretch(baseUrl + "/api/gpt")
       .post({ prompt })
       .json((response) => {
         if (response?.message) {
           setResponse(response.message);
+          setloading(false);
         } else {
           setError("ERR");
+          setloading(false);
         }
       })
       .catch((error) => {
         // Handle error
         console.log(error);
+        setloading(false);
       });
-    // const response = await axios.post(baseUrl + "/api/gpt", {prompt});
-    // if (response.status < 300 && response?.data?.message?.length > 0) {
-    //   setloading(false);
-    //   setResponse(response.data.message);
-    // } else if (response.status > 300) {
-    //   setloading(false);
-    //   setError(`${response.status}`);
-    // } else {
-    //   setloading(false);
-    // }
+  };
+  const askDavinci = async (prompt) => {
+    setloading(true);
+    wretch(baseUrl + "/api/chat")
+      .post({ prompt })
+      .json((response) => {
+        if (response?.message) {
+          setResponse(response.message);
+          setloading(false);
+        } else {
+          setError("ERR");
+          setloading(false);
+        }
+      })
+      .catch((error) => {
+        // Handle error
+        console.log(error);
+        setloading(false);
+      });
   };
 
   return (
@@ -55,11 +67,28 @@ const Gpt = () => {
       {!loading && (
         <>
           <Form
-            onFinish={onFinish}
+            onFinish={askTurbo}
             className="d-flex flex-column gap-2 justify-content-center align-items-center"
           >
             <Form.Item
-              label={<label style={{ color: "red" }}>Write a prompt</label>}
+              label={<label style={{ color: "red" }}>ASK TURBO MODEL</label>}
+              name="prompt"
+              rules={[{ required: true, message: "Please pass a prompt" }]}
+            >
+              <TextArea type="textArea" />
+            </Form.Item>
+            <Form.Item>
+              <Button type="primary" htmlType="submit">
+                Submit
+              </Button>
+            </Form.Item>
+          </Form>
+          <Form
+            onFinish={askDavinci}
+            className="d-flex flex-column gap-2 justify-content-center align-items-center"
+          >
+            <Form.Item
+              label={<label style={{ color: "red" }}>ASK DAVINCI MODEL</label>}
               name="prompt"
               rules={[{ required: true, message: "Please pass a prompt" }]}
             >
