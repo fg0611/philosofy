@@ -11,7 +11,7 @@ console.log(baseUrl);
 
 const Gpt = () => {
   const [error, setError] = useState("");
-  const [response, setResponse] = useState("");
+  const [aiRes, setaiRes] = useState(null);
   const [prompt, setprompt] = useState("");
   const [loading, setloading] = useState(false);
 
@@ -20,9 +20,10 @@ const Gpt = () => {
     setError("");
     wretch(baseUrl + "/api/gpt")
       .post({ prompt })
-      .json((response) => {
-        if (response?.message) {
-          setResponse(response.message);
+      .json((data) => {
+        console.log(data);
+        if (data?.message &&  data?.message?.prompt?.length && data?.message?.response?.length) {
+          setaiRes(data.message);
           setloading(false);
         } else {
           setError("ERR");
@@ -40,9 +41,10 @@ const Gpt = () => {
     setError("");
     wretch(baseUrl + "/api/chat")
       .post({ prompt })
-      .json((response) => {
-        if (response?.message) {
-          setResponse(response.message);
+      .json((data) => {
+        console.log(data);
+        if (data?.message &&  data?.message?.prompt?.length && data?.message?.response?.length) {
+          setaiRes(data.message);
           setloading(false);
         } else {
           setError("ERR");
@@ -98,9 +100,16 @@ const Gpt = () => {
             </Button>
           </div>
 
-          <p>
-            {response?.length > 0 && error?.length === 0 ? response : error}
-          </p>
+          <h5>
+            {aiRes !== null && error?.length === 0
+              ? `Prompt: ${aiRes?.prompt}`
+              : "Your reponse will show up here!"}
+          </h5>
+          <h5>
+            {aiRes !== null && error?.length === 0
+              ? `AI Response: ${aiRes?.response}`
+              : error}
+          </h5>
         </>
       )}
     </div>
