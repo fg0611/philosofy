@@ -35,10 +35,23 @@ function Quotes() {
       setloading(false);
     }
   };
+  // const getGpt = async () => {
+  //   setloading(true);
+  //   const response = await axios.get(baseUrl + "/api/test");
+  //   if (response.status < 300 && response?.data?.message?.length > 0) {
+  //     setloading(false);
+  //     setquote(response.data.message);
+  //   } else if (response.status > 300) {
+  //     setloading(false);
+  //     setError(`${response.status}`);
+  //   } else {
+  //     setloading(false);
+  //   }
+  // };
 
   return (
     <div
-      className="d-flex flex-column gap-4 p-4 vw-100 vh-100 justify-content-center align-items-center text-white"
+      className="d-flex flex-column gap-4 p-4 vw-100 vh-100 align-items-center text-white"
       style={{ background: "#0f2026" }}
     >
       {loading && (
@@ -58,6 +71,7 @@ function Quotes() {
           <div className="d-flex gap-4">
             <Button onClick={getByAuthor}>By random author</Button>
             <Button onClick={getBySchool}>By random school</Button>
+            {/* <Button onClick={getGpt}>Get response</Button> */}
           </div>
         </>
       )}

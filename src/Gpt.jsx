@@ -1,7 +1,7 @@
 // import axios from "axios";
 import wretch from "wretch";
 import { useState } from "react";
-import { Button, Form, Input } from "antd";
+import { Button, Input } from "antd";
 const { TextArea } = Input;
 import loader from "./assets/loader.gif";
 // import TextArea from "antd/es/input/TextArea";
@@ -12,10 +12,12 @@ console.log(baseUrl);
 const Gpt = () => {
   const [error, setError] = useState("");
   const [response, setResponse] = useState("");
+  const [prompt, setprompt] = useState("");
   const [loading, setloading] = useState(false);
 
   const askTurbo = async (prompt) => {
     setloading(true);
+    setError("");
     wretch(baseUrl + "/api/gpt")
       .post({ prompt })
       .json((response) => {
@@ -35,6 +37,7 @@ const Gpt = () => {
   };
   const askDavinci = async (prompt) => {
     setloading(true);
+    setError("");
     wretch(baseUrl + "/api/chat")
       .post({ prompt })
       .json((response) => {
@@ -53,9 +56,14 @@ const Gpt = () => {
       });
   };
 
+  const hInput = (event) => {
+    console.log("val:: ", event.target.value);
+    setprompt(event.target.value);
+  };
+
   return (
     <div
-      className="d-flex flex-column gap-4 p-4 vw-100 vh-100 justify-content-center align-items-center text-white"
+      className="d-flex flex-column gap-4 p-4 vw-100 vh-100 justify-content-start align-items-center text-white"
       style={{ background: "#0f2026" }}
     >
       {loading && (
@@ -66,40 +74,30 @@ const Gpt = () => {
       )}
       {!loading && (
         <>
-          <Form
-            onFinish={askTurbo}
-            className="d-flex flex-column gap-2 justify-content-center align-items-center"
-          >
-            <Form.Item
-              label={<label style={{ color: "red" }}>ASK TURBO MODEL</label>}
-              name="prompt"
-              rules={[{ required: true, message: "Please pass a prompt" }]}
+          <TextArea
+            maxLength={100}
+            style={{ width: "400px", height: "150px" }}
+            onChange={hInput}
+          />
+          <div className="d-flex gap-3">
+            <Button
+              type="primary"
+              onClick={() => {
+                askTurbo(prompt);
+              }}
             >
-              <TextArea type="textArea" />
-            </Form.Item>
-            <Form.Item>
-              <Button type="primary" htmlType="submit">
-                Submit
-              </Button>
-            </Form.Item>
-          </Form>
-          <Form
-            onFinish={askDavinci}
-            className="d-flex flex-column gap-2 justify-content-center align-items-center"
-          >
-            <Form.Item
-              label={<label style={{ color: "red" }}>ASK DAVINCI MODEL</label>}
-              name="prompt"
-              rules={[{ required: true, message: "Please pass a prompt" }]}
+              Ask AI - turbo
+            </Button>
+            <Button
+              type="primary"
+              onClick={() => {
+                askDavinci(prompt);
+              }}
             >
-              <TextArea type="textArea" />
-            </Form.Item>
-            <Form.Item>
-              <Button type="primary" htmlType="submit">
-                Submit
-              </Button>
-            </Form.Item>
-          </Form>
+              Ask AI - davinci (more expensive!)
+            </Button>
+          </div>
+
           <p>
             {response?.length > 0 && error?.length === 0 ? response : error}
           </p>
