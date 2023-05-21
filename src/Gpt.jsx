@@ -7,7 +7,6 @@ import loader from "./assets/loader.gif";
 // import TextArea from "antd/es/input/TextArea";
 
 const baseUrl = import.meta.env.VITE_API_URL;
-console.log(baseUrl);
 
 const Gpt = () => {
   const [error, setError] = useState("");
@@ -21,8 +20,11 @@ const Gpt = () => {
     wretch(baseUrl + "/api/gpt")
       .post({ prompt })
       .json((data) => {
-        console.log(data);
-        if (data?.message &&  data?.message?.prompt?.length && data?.message?.response?.length) {
+        if (
+          data?.message &&
+          data?.message?.prompt?.length &&
+          data?.message?.response?.length
+        ) {
           setaiRes(data.message);
           setloading(false);
         } else {
@@ -42,8 +44,11 @@ const Gpt = () => {
     wretch(baseUrl + "/api/chat")
       .post({ prompt })
       .json((data) => {
-        console.log(data);
-        if (data?.message &&  data?.message?.prompt?.length && data?.message?.response?.length) {
+        if (
+          data?.message &&
+          data?.message?.prompt?.length &&
+          data?.message?.response?.length
+        ) {
           setaiRes(data.message);
           setloading(false);
         } else {
@@ -59,7 +64,6 @@ const Gpt = () => {
   };
 
   const hInput = (event) => {
-    console.log("val:: ", event.target.value);
     setprompt(event.target.value);
   };
 
@@ -74,7 +78,7 @@ const Gpt = () => {
           <img className="h-25" src={loader} loading="lazy" />
         </>
       )}
-      {!loading && (
+      {!loading && aiRes === null && (
         <>
           <TextArea
             maxLength={100}
@@ -92,6 +96,7 @@ const Gpt = () => {
             </Button>
             <Button
               type="primary"
+              danger
               onClick={() => {
                 askDavinci(prompt);
               }}
@@ -99,7 +104,22 @@ const Gpt = () => {
               Ask AI - davinci (more expensive!)
             </Button>
           </div>
-
+        </>
+      )}
+      {!loading && (
+        <>
+          {aiRes !== null && (
+            <Button
+              type="primary"
+              onClick={() => {
+                setError("");
+                setaiRes(null);
+                setprompt("");
+              }}
+            >
+              MAKE NEW PROMPT
+            </Button>
+          )}
           <h5>
             {aiRes !== null && error?.length === 0
               ? `Prompt: ${aiRes?.prompt}`
