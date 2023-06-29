@@ -17,6 +17,10 @@ const Header = () => {
         return "g";
       case "/quotes":
         return "q";
+      // case "/printers":
+      //   return "p";
+      case "/scanner":
+        return "s";
       default:
         return "h";
       }
@@ -43,6 +47,12 @@ const Header = () => {
         </Menu.Item>
         <Menu.Item key="q" icon={<CheckCircleTwoTone />}>
           <Link to="/quotes">Quotes</Link>
+        </Menu.Item>
+        {/* <Menu.Item key="p" icon={<CheckCircleTwoTone />}>
+          <Link to="/printers">Printers</Link>
+        </Menu.Item> */}
+        <Menu.Item key="s" icon={<CheckCircleTwoTone />}>
+          <Link to="/scanner">Scanner</Link>
         </Menu.Item>
       </Menu>
       <Outlet />
