@@ -44,10 +44,10 @@ const Scanner = () => {
     // img.src = `data:image/svg+xml;base64,${btoa(svgData)}`;
     // console.log("img.src");
     // console.log(img.src);
-    const stringData = decodedResults[decodedResults.length - 1].decodedText
-    console.log(stringData)
+    const stringData = decodedResults[decodedResults.length - 1].decodedText;
+    console.log(stringData);
     axios.get(
-      `http://fluxqr.com/im?data=${stringData}`,
+      `http://fluxqr.com/im?data=${stringData}`
       // `http://127.0.0.1:8000/im?data=${stringData}`,
       // stringData,
       // { headers: { "Content-Type": "application/json" } }
@@ -65,12 +65,14 @@ const Scanner = () => {
       // className="d-flex flex-column gap-4 p-4 vw-100 vh-100 align-items-center text-white"
       // style={{ background: "#0f2026" }}
     >
-      <Html5QrcodePlugin
-        fps={5}
-        qrbox={250}
-        disableFlip={false}
-        qrCodeSuccessCallback={onNewScanResult}
-      />
+      <div>
+        <Html5QrcodePlugin
+          fps={5}
+          qrbox={250}
+          disableFlip={false}
+          qrCodeSuccessCallback={onNewScanResult}
+        />
+      </div>
       <ResultContainerPlugin results={decodedResults} />
       <div
         style={{
@@ -82,17 +84,17 @@ const Scanner = () => {
       ></div>
       {decodedResults.length > 0 && (
         <div className="d-flex flex-column pb-4">
-          <QRCode
-            size={256}
+          {/* <QRCode
+            size={100}
             style={{ height: "auto", maxWidth: "100%", width: "100%" }}
             value={decodedResults[decodedResults.length - 1].decodedText}
             viewBox={`0 0 256 256`}
-          />
+          /> */}
           <input
             className="mt-2"
             type="button"
             onClick={handleGenerate}
-            value="SEND CONTENT"
+            value="SEND LATEST SCAN"
           />
         </div>
       )}
