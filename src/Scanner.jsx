@@ -22,21 +22,41 @@ const Scanner = () => {
     setDecodedResults((prev) => [...prev, decodedResult]);
   };
 
-  const handleGenerate = async () => {
-    const svg = document.getElementsByTagName("svg");
-    console.log(svg[decodedResults.length - 1]);
-    const svgData = new XMLSerializer().serializeToString(svg[decodedResults.length - 1]);
-    console.log(typeof svgData);
-    console.log(svgData);
-    const response = await axios.post(
-      "http://127.0.0.1:8000/scanner",
-      svgData,
+  const handleGenerate = () => {
+    // const svg = document.getElementsByTagName("svg");
+    // console.log(svg[decodedResults.length - 1]);
+    // const svgData = new XMLSerializer().serializeToString(
+    //   svg[decodedResults.length - 1]
+    // );
+    // console.log(typeof svgData);
+    // console.log(svgData);
+    // const canvas = document.createElement("canvas");
+    // const ctx = canvas.getContext("2d");
+    // const img = new Image();
+    // img.onload = () => {
+    //   canvas.width = img.width;
+    //   canvas.height = img.height;
+    //   ctx.drawImage(img, 0, 0);
+    //   const pngFile = canvas.toDataURL("image/png");
+    //   console.log("pngFile");
+    //   console.log(pngFile);
+    // };
+    // img.src = `data:image/svg+xml;base64,${btoa(svgData)}`;
+    // console.log("img.src");
+    // console.log(img.src);
+    const stringData = decodedResults[decodedResults.length - 1].decodedText
+    console.log(stringData)
+    axios.get(
+      `http://fluxqr.com/im?data=${stringData}`,
+      // `http://127.0.0.1:8000/im?data=${stringData}`,
+      // stringData,
       // { headers: { "Content-Type": "application/json" } }
       // { headers: { "Content-Type": "text/html" } }
-      { headers: { "Content-Type": "image/svg+xml" } }
+      // { headers: { "Content-Type": "text/plain" } }
+      // { headers: { "Content-Type": "image/svg+xml" } }
     );
 
-    if (response) console.log(response);
+    // if (response) console.log(response);
   };
 
   return (
@@ -46,7 +66,7 @@ const Scanner = () => {
       // style={{ background: "#0f2026" }}
     >
       <Html5QrcodePlugin
-        fps={10}
+        fps={5}
         qrbox={250}
         disableFlip={false}
         qrCodeSuccessCallback={onNewScanResult}
@@ -68,7 +88,12 @@ const Scanner = () => {
             value={decodedResults[decodedResults.length - 1].decodedText}
             viewBox={`0 0 256 256`}
           />
-          <input className="mt-2" type="button" onClick={handleGenerate} value="SEND CONTENT" />
+          <input
+            className="mt-2"
+            type="button"
+            onClick={handleGenerate}
+            value="SEND CONTENT"
+          />
         </div>
       )}
     </div>
