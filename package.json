@@ -20,6 +20,7 @@
     "react": "^18.2.0",
     "react-bootstrap": "^2.7.4",
     "react-dom": "^18.2.0",
+    "react-qr-code": "^2.0.11",
     "react-router-dom": "^6.11.1",
     "sort-by": "^1.2.0",
     "wretch": "^2.5.2"
